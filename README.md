@@ -1,14 +1,44 @@
-# geohashtreemap
+# GeohashTree
 
-A new Flutter package project.
+# Dart GeohashTree
+![Pub Version](https://img.shields.io/pub/v/geohashtree)
 
-## Getting Started
+**GeohashTree** is a tree implimentation to speed up spacial queries through geohash indexing. This is useful for dynamically querying small selections of locations in a certain radius for example to display in a map as the user scrolls. The GeohashTree can have a variable depth with the default set at 9. This corresponds to a geohash of precision or length 9.  
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+## Install
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+To get this plugin, add `geohashtree` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/). For example:
+
+```yaml
+dependencies:
+  geohashtree: ^1.0.0
+```
+
+## Usage
+
+It is possible to add spatial based values to the tree with a geohash or directly with lat lng coordinates.
+
+``` dart
+import 'package:geohashtree/geohashtree.dart';
+
+GeohashTree<String> tree = GeohashTree<String>(); 
+tree.add("6g3mc", "iguazu"); 
+tree.addLatLng(-25.686667, -54.444722, "also iguazu");
+```
+
+To get all the coordinates in a tree within a radius of `5000` meters from the point `25.6953° S, 54.4367° W`  use `getGeohashesByProximity()`. The `precision` parameter dictates how specific the geohash match should be. Precision 5 return matches of geohash of length 5, which in this case would be all geohashes that start with "6g3mc". Precision 1 return matches of geohash of length 1, which in this case would be all geohashes that start with "6".
+
+``` dart
+List<String> values = tree.getGeohashesByProximity(-25.686667, -54.444722,5000, precision: 9);
+```
+
+## Issues
+
+Please file any issues, bugs or feature requests as an issue on our [GitHub](https://github.com/anovis/geohashtree/issues) page. 
+
+## Want to contribute
+
+If you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature) submit a [pull request](https://github.com/anovis/geohashtree/pulls).
+
+
+

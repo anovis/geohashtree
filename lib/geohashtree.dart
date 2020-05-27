@@ -11,6 +11,8 @@ class GeohashTreeNode<V> {
   GeohashTreeNode(this.geohash,{this.value, this.level});
 }
 
+/// GeohashTree is a tree structure with geohashes as the indices and [GeohashTreeNode] as the nodes.
+/// The depth of the GeohashTree can set using [maxDepth] parameter.  
 class GeohashTree<V> {
   GeohashTreeNode<V> _root = GeohashTreeNode(null,level: 0);
   final int maxDepth; 
@@ -20,11 +22,14 @@ class GeohashTree<V> {
 
   GeohashTree({this.maxDepth:9});
 
+  /// returns the root [GeohashTreeNode] node
   GeohashTreeNode<V> getRoot(){
     return _root;
   }
 
-  // radius (m)
+  /// Returns the list of values that contain geohashes in a certain [radius] (meters) of the center coordinate radius.
+  /// A [precision] can be set which determines how precise the geohashes will be. For example a precision of 1 with return
+  /// a geohash of length 1.
   List<V> getGeohashesByProximity(double latitude,double longitude,double radius,{int precision}){
     int _precision = precision ?? maxDepth;
     List<String> proximityGeohashes = createGeohashes(latitude, longitude, radius, _precision);
@@ -35,12 +40,16 @@ class GeohashTree<V> {
     return values.toList();
   }
 
+  /// Gets the value associated with the [geohash]. If the geohash is not found then it returns null.
   V getGeohash(String geohash){
     GeohashTreeNode<V> node = _getNode(_root, geohash);
     if (node == null) return null;
     return node.value;
   }
 
+  /// Returns a list of values associated with the [geohash] with [precision]. For example a geohash "6wgdx" and precision 2
+  /// will return all values that have a geohash that starts with "6w". If not precision is given then it defaults to the length 
+  /// of the given geohash.
   List<V> getGeohashes(String geohash, {int precision}){
     int _precision = precision ?? geohash.length;
 
@@ -79,32 +88,40 @@ class GeohashTree<V> {
     return nodes;
   }
  
+  /// Add a value using coordinates. This converts the coordiantes to a geohash given the 
+  /// precision. If no precision is given then it defaults to [maxDepth] 
   void addLatLng(double lat, double long,V v, {int precision}){
     int _precision = precision ?? maxDepth;
     String hashedKey = geoHasher.encode(long, lat,precision: _precision);
     _putNode(_root, hashedKey, v);
   }
 
+  ///Add a value with the geohash as the key
   void add(String geohash, V v){
     _putNode(_root, geohash, v, level:0);
   }
-
+  
+  /// Add [GeohashTreeNode] to the tree.
   void addNodes(Iterable<GeohashTreeNode<V>> newNodes){
     for (var node in newNodes) {
       _putNode(_root,node.geohash,node.value);
     }
   }
 
+  /// Returns true if the tree contains at least 1 of [value]
   bool containsValue(V value){
     List<V> values = _getValues(_root);
     return values.contains(value);
   }
 
+  /// Returns true if the tree contains the [geohash]
   bool containsGeohash(String geohash){
     List<String> geohashes = _getGeohashes(_root);
     return geohashes.contains(geohash);
   }
 
+  /// Updates a geohashes [value] by calling [update]. If the geohash doesn't exist
+  /// in the tree then [ifAbsent] is called. 
   V update(String geohash, V update(V value),{V ifAbsent()}){
     GeohashTreeNode<V> node = _getNode(_root,geohash);
     if (node == null){
@@ -120,12 +137,14 @@ class GeohashTree<V> {
     }
   }
 
-  void removeWhere(bool predicate(String key, V value)){
+  /// Removes nodes that evaluate [f] to true. The function takes in a geohash and a value. 
+  void removeWhere(bool f(String geohash, V value)){
     List<GeohashTreeNode<V>> nodes = _getNodes(_root);
-    Iterable<GeohashTreeNode<V>> removeNodes = nodes.where((node)=>predicate(node.geohash,node.value));
+    Iterable<GeohashTreeNode<V>> removeNodes = nodes.where((node)=>f(node.geohash,node.value));
     removeNodes.forEach((n)=> remove(n.geohash));
   }
 
+  /// Removes node with [geohash] from the tree.
   V remove(String geohash){
     GeohashTreeNode<V> parentNode = _getNode(_root, geohash.substring(0,geohash.length-1).substring(0,maxDepth));    
     GeohashTreeNode<V> removedNode = parentNode.children.remove(geohash.substring(maxDepth,geohash.length));
@@ -136,23 +155,28 @@ class GeohashTree<V> {
     return removedNode.value;
   }
 
+  ///Iterate through tree nodes
   void forEach(void f(String geohash, V value)){
     List<GeohashTreeNode> nodes = _getNodes(_root);
     nodes.forEach((node)=>f(node.geohash,node.value));
   }
 
+  /// All geohashes in the tree
   Iterable<String> get geohashes{
     return _getGeohashes(_root);
   }
 
+  /// All values in the tree
   Iterable<V> get values{
     return _getValues(_root);
   }
 
+  /// Returns true if the tree is empty. 
   bool get isEmpty{
     return length == 0? true: false; 
   }
 
+  /// Factory method to create a new [GeohashTree] from an existing [GeohashTree]
   factory GeohashTree.from(GeohashTree<V> other){
     List<GeohashTreeNode<V>> otherNodes = other._getNodes(other._root);
     GeohashTree<V> n = GeohashTree<V>(maxDepth: other.maxDepth);
@@ -160,12 +184,15 @@ class GeohashTree<V> {
     return n;
   }
 
-   V operator [](String geohash) {
+  /// Allows the use of the bracket operator to get a value. For example `Tree["hash"]`
+  V operator [](String geohash) {
     if (_root != null) {
       return getGeohash(geohash);
     }
     return null;
   }
+
+  /// Allows the use of the bracket operator to set a value. For example `Tree["hash"]="value"`
   void operator []=(String geohash, V value) {
     if (geohash == null) throw ArgumentError(geohash);
     _putNode(_root, geohash, value);

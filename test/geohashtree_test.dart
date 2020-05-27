@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:geohashtreemap/geohashtreemap.dart';
+import 'package:geohashtree/geohashtree.dart';
 
 void main() {
   group('Adding values and nodes', () {
