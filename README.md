@@ -2,6 +2,7 @@
 
 # Dart GeohashTree
 ![Pub Version](https://img.shields.io/pub/v/geohashtree)
+![Master](https://github.com/anovis/geohashtree/workflows/Dart%20CI/badge.svg?branch=master)
 
 **GeohashTree** is a tree implimentation to speed up spacial queries through geohash indexing. This is useful for dynamically querying small selections of locations in a certain radius for example to display in a map as the user scrolls. The GeohashTree can have a variable depth with the default set at 9. This corresponds to a geohash of precision or length 9.  
 

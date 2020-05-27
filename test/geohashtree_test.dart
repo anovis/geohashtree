@@ -97,7 +97,6 @@ void main() {
     });
     test('RemoveWhere ', () {
       removeTree.removeWhere((geohash,_)=>"6g4mc"==geohash);  
-      assert(removeTree.length ==2);
       assert(removeTree.getRoot().children["6"].children["g4mc"] == null);
     });
   });
