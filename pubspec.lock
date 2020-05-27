@@ -79,7 +79,7 @@ packages:
     source: hosted
     version: "0.16.1"
   dart_geohash:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dart_geohash
       url: "https://pub.dartlang.org"

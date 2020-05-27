@@ -17,10 +17,8 @@ class GeohashTree<V> {
   GeohashTreeNode<V> _root = GeohashTreeNode(null,level: 0);
   final int maxDepth; 
   int length = 0;
-  GeoHasher geoHasher = GeoHasher();
 
-
-  GeohashTree({this.maxDepth:9});
+  GeohashTree({this.maxDepth=9});
 
   /// returns the root [GeohashTreeNode] node
   GeohashTreeNode<V> getRoot(){
@@ -92,7 +90,7 @@ class GeohashTree<V> {
   /// precision. If no precision is given then it defaults to [maxDepth] 
   void addLatLng(double lat, double long,V v, {int precision}){
     int _precision = precision ?? maxDepth;
-    String hashedKey = geoHasher.encode(long, lat,precision: _precision);
+    String hashedKey = GeoHasher().encode(long, lat,precision: _precision);
     _putNode(_root, hashedKey, v);
   }
 

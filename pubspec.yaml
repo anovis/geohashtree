@@ -1,14 +1,14 @@
 name: geohashtree
-description: A new Flutter package project.
-version: 1.0.0
-author:
-homepage:
+description: GeohashTree is a tree implimentation to speed up spacial queries through geohash indexing.
+version: 1.0.1
+homepage: https://github.com/anovis/geohashtree
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   proximity_hash: ^1.0.1
+  dart_geohash: ^1.0.2
 
 dev_dependencies:
   test: ^1.2.0
