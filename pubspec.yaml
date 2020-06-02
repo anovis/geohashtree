@@ -1,6 +1,6 @@
 name: geohashtree
 description: GeohashTree is a tree implimentation to speed up spacial queries through geohash indexing.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/anovis/geohashtree
 
 environment:

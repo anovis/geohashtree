@@ -12,7 +12,7 @@ To get this plugin, add `geohashtree` as a [dependency in your pubspec.yaml file
 
 ```yaml
 dependencies:
-  geohashtree: ^1.0.1
+  geohashtree: ^1.0.2
 ```
 
 ## Usage
