@@ -135,6 +135,15 @@ class GeohashTree<V> {
     }
   }
 
+  /// Updates a geohashes [value] by calling [update]. This converts the coordiantes to a geohash given the 
+  /// precision. If no precision is given then it defaults to [maxDepth] If the geohash doesn't exist
+  /// in the tree then [ifAbsent] is called. 
+  V updateLatLng(double lat, double long,V updateValue(V value),{int precision, V ifAbsent()}) {
+    int _precision = precision ?? maxDepth;
+    String geohash = GeoHasher().encode(long, lat,precision: _precision);
+    return update(geohash,updateValue,ifAbsent:ifAbsent);
+  }
+
   /// Removes nodes that evaluate [f] to true. The function takes in a geohash and a value. 
   void removeWhere(bool f(String geohash, V value)){
     List<GeohashTreeNode<V>> nodes = _getNodes(_root);
