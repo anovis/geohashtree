@@ -11,6 +11,7 @@ void main() {
 
   //update value 
   tree.update("6g3mc", (s)=>"iguazu_falls");  
+  tree.updateLatLng(-25.686667, -54.444722, (s)=>"iguazu_falls");  
 
   //get value
   tree.getGeohash("6g3mc");

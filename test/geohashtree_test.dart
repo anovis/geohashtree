@@ -11,6 +11,8 @@ void main() {
         assert(addTree.length==1);
         addTree.add("6g4mc", "iguazu");
         assert(addTree.length==2);
+        addTree.add("6g4mc", "iguazu");
+        assert(addTree.length==2);
       });
     test('Adding geohash with operator', () {
       GeohashTree<String> addTree = GeohashTree<String>(maxDepth: 1);
@@ -44,6 +46,11 @@ void main() {
         assert(updateTree.getRoot().children.length==1);
         assert(updateTree.getRoot().children["6"].children["g3mc"].value=="iguazu_falls");
       });
+    test('Updating using lat long coordinates', () {
+      updateTree.updateLatLng(-25.686667, -54.444722, (s)=>"iguazu_falls", precision: 5);  
+      assert(updateTree.getRoot().children.length==1);
+      assert(updateTree.getRoot().children["6"].children["g3mc"].value=="iguazu_falls");
+    });
 
     test('Update ifAbsent', () {
       updateTree.update("7g3mc", (s)=>"iguazu_falls",ifAbsent: ()=>"niagara");  
